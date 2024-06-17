@@ -1,6 +1,7 @@
 import string
 
 from conditions import conditions
+from game_keyword import check_keyword
 
 '''
      |-----------
@@ -26,12 +27,15 @@ class Viselica:
         self.flag = True
 
     def input_letter(self) -> str:
-        letter = input('Введите букву - ')
-        if len(letter) != 1 or letter in string.punctuation or letter == ' ':
+        letter = input('Введите букву - ').lower().strip()
+        if letter in self.wrong_letters:
+            print('Эта буква уже угадана')
+        if len(letter) != 1 or letter in string.punctuation:
             print('Введите только одну букву')
             letter = self.input_letter()
         if letter.isdigit():
             print('Значение не должно быть числом')
+            letter = self.input_letter()
         return letter
 
     def check_letter(self, letter) -> bool:
@@ -66,7 +70,7 @@ class Viselica:
             if len(self.wrong_letters) <= len(conditions):
                 self.field_condition = conditions[len(self.wrong_letters)]
             else:
-                print('Вы Дашка! поправьте трусы')
+                print('Вы проиграли эту битву!')
                 print(f'А слово было {self.word}')
                 self.flag = False
                 return
@@ -76,7 +80,8 @@ class Viselica:
             self.flag = False
 
 
-game = Viselica("слово")
+word = check_keyword()
+game = Viselica(word)
 
 game.play()
 
