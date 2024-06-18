@@ -29,9 +29,13 @@ class Viselica:
     def input_letter(self) -> str:
         letter = input('Введите букву - ').lower().strip()
         if letter in self.wrong_letters:
-            print('Эта буква уже угадана')
+            print('Эта буква уже была')
+            letter = self.input_letter()
         if len(letter) != 1 or letter in string.punctuation:
             print('Введите только одну букву')
+            letter = self.input_letter()
+        if letter in self.word_condition:
+            print('Эта буква уже есть в слове')
             letter = self.input_letter()
         if letter.isdigit():
             print('Значение не должно быть числом')
@@ -67,9 +71,9 @@ class Viselica:
             self.update_word_condition(new_letter)
         else:
             self.wrong_letters.add(new_letter)
-            if len(self.wrong_letters) <= len(conditions):
-                self.field_condition = conditions[len(self.wrong_letters)]
-            else:
+            self.field_condition = conditions[len(self.wrong_letters)]
+            if len(self.wrong_letters) == len(conditions) - 1:
+                print(self.field_condition)
                 print('Вы проиграли эту битву!')
                 print(f'А слово было {self.word}')
                 self.flag = False
@@ -84,4 +88,3 @@ word = check_keyword()
 game = Viselica(word)
 
 game.play()
-
